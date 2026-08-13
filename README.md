@@ -45,6 +45,53 @@
 
 ---
 
+## 🖼️ 系统截图展示
+
+### 👨‍🏫 教师端管理后台
+
+| 角色选择 / 登录 | 仪表盘 / 首页 |
+|:---:|:---:|
+| ![角色选择](docs/screenshots/01-role-select.png) | ![教师仪表盘](docs/screenshots/03-teacher-dashboard.png) |
+| *多角色入口* | *教师登录后首页* |
+
+| **成绩审核（核心）** | 成绩汇总 |
+|:---:|:---:|
+| ![成绩审核页](docs/screenshots/04-score-audit.png) | ![成绩汇总](docs/screenshots/05-score-summary.png) |
+| *待审核/已通过/未通过 + 通过拒绝按钮* | *多条件筛选 + 分页* |
+
+| 班级统计分析 | 预警通知 |
+|:---:|:---:|
+| ![班级统计](docs/screenshots/06-class-stats.png) | ![预警通知](docs/screenshots/07-teacher-warnings.png) |
+| *平均/最高/最低分 + 达标/预警人数* | *预警学生/接近预警/达标学生分类* |
+
+---
+
+### 🧑‍💼 管理员端
+
+| 机构管理（树形结构） | 赛事管理 |
+|:---:|:---:|
+| ![机构树](docs/screenshots/13-admin-org-tree.png) | ![赛事管理](docs/screenshots/14-admin-event-manage.png) |
+| *院系/专业/班级三层级联树* | *赛事/赛项/获奖级别 CRUD* |
+
+---
+
+### 🎓 学生端（Web 版 / 对应鸿蒙 App 同布局）
+
+| 学生登录（移动端尺寸） | 首页仪表盘 |
+|:---:|:---:|
+| ![学生登录](docs/screenshots/08-student-login-mobile.png) | ![学生首页](docs/screenshots/09-student-home.png) |
+| *账号密码登录* | *总积分/赛事入口* |
+
+| 学习计划 | 成绩填报 | 我的成绩 |
+|:---:|:---:|:---:|
+| ![学习计划](docs/screenshots/10-student-study-plan.png) | ![成绩填报](docs/screenshots/11-student-score-submit.png) | ![我的成绩](docs/screenshots/12-student-my-scores.png) |
+| *学分要求/赛事推荐* | *赛事+赛项+级别选择+证书上传* | *明细 + 审核状态实时展示* |
+
+> 📌 截图脚本：[`docs/take_screenshots.py`](docs/take_screenshots.py)（Playwright 自动化截图）
+> 📁 所有截图：[`docs/screenshots/`](docs/screenshots/)
+
+---
+
 ## 📁 项目结构
 
 ```
