@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.egg-info/
+
+# 测试报告
+tests/reports/*
+!tests/reports/.gitkeep
+tests/.pytest_cache/
+htmlcov/
+.coverage
+test-results/
+
+# Playwright
+playwright/.cache/
+*.playwright-artifacts/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 环境变量
+.env
+.env.local

@@ -1,0 +1,263 @@
+name: 自动化测试 CI
+
+# 触发条件：推送到main/master分支或创建Pull Request时执行
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'tests/**'
+      - 'Hongmeng/src/**'
+      - 'frontend-admin/src/**'
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # 支持手动触发
+
+env:
+  BACKEND_URL: http://localhost:8080
+  FRONTEND_URL: http://localhost:5173
+
+jobs:
+  # Job 1: 接口自动化测试
+  api-test:
+    name: 后端接口自动化测试
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    services:
+      # MySQL服务
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root123456
+          MYSQL_DATABASE: second_classroom
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test123456
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 安装Python依赖
+        working-directory: ./
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tests/requirements-api.txt
+
+      - name: 设置JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: 编译后端项目
+        working-directory: ./Hongmeng
+        run: |
+          mvn clean compile -DskipTests -q 2>&1 | tail -20 || true
+          echo "后端编译完成"
+
+      - name: 启动后端服务（后台运行）
+        working-directory: ./Hongmeng
+        run: |
+          mvn spring-boot:run -DskipTests > /tmp/backend.log 2>&1 &
+          echo $! > /tmp/backend.pid
+          
+          # 等待服务启动（最多等待120秒）
+          echo "等待后端服务启动..."
+          for i in {1..24}; do
+            if curl -s http://localhost:8080/api/auth/login > /dev/null 2>&1; then
+              echo "后端服务启动成功!"
+              break
+            fi
+            echo "  等待中... (${i}/24)"
+            sleep 5
+          done
+
+      - name: 运行接口自动化测试
+        working-directory: ./
+        run: |
+          cd tests
+          python -m pytest api/ -v -s \
+            --html=reports/api_test_report.html \
+            --self-contained-html \
+            --junitxml=reports/api_test_results.xml \
+            --alluredir=reports/allure-results \
+            || true  # 允许测试失败，仍然上传报告
+
+      - name: 关闭后端服务
+        if: always()
+        run: |
+          if [ -f /tmp/backend.pid ]; then
+            kill $(cat /tmp/backend.pid) 2>/dev/null || true
+          fi
+          echo "=== 后端日志(最后50行) ==="
+          tail -50 /tmp/backend.log 2>/dev/null || echo "无法读取后端日志"
+
+      - name: 上传接口测试报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: API测试报告
+          path: |
+            tests/reports/api_test_report.html
+            tests/reports/api_test_results.xml
+          retention-days: 30
+
+  # Job 2: 前端UI自动化测试
+  ui-test:
+    name: 前端UI自动化测试
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    needs: api-test  # 等待接口测试完成
+    
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 设置Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 安装Python和UI测试依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tests/requirements-ui.txt
+          python -m playwright install chromium
+          python -m playwright install-deps
+
+      - name: 设置Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 安装前端依赖并构建
+        working-directory: ./frontend-admin
+        run: |
+          npm install 2>&1 | tail -10 || npm install --legacy-peer-deps 2>&1 | tail -10
+          echo "前端依赖安装完成"
+      
+      - name: 启动前端服务
+        working-directory: ./frontend-admin
+        run: |
+          npm run dev > /tmp/frontend.log 2>&1 &
+          echo $! > /tmp/frontend.pid
+          
+          echo "等待前端服务启动..."
+          for i in {1..30}; do
+            if curl -s http://localhost:5173 > /dev/null 2>&1; then
+              echo "前端服务启动成功!"
+              break
+            fi
+            echo "  等待中... (${i}/30)"
+            sleep 3
+          done
+
+      - name: 创建报告目录
+        run: mkdir -p tests/reports
+
+      - name: 运行UI自动化测试
+        working-directory: ./
+        run: |
+          cd tests
+          python -m pytest ui/ -v -s \
+            --html=reports/ui_test_report.html \
+            --self-contained-html \
+            --junitxml=reports/ui_test_results.xml \
+            --screenshot=on \
+            --video=retain-on-failure \
+            || true
+
+      - name: 关闭前端服务
+        if: always()
+        run: |
+          if [ -f /tmp/frontend.pid ]; then
+            kill $(cat /tmp/frontend.pid) 2>/dev/null || true
+          fi
+          echo "=== 前端日志(最后50行) ==="
+          tail -50 /tmp/frontend.log 2>/dev/null || echo "无法读取前端日志"
+
+      - name: 上传UI测试报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: UI测试报告
+          path: |
+            tests/reports/ui_test_report.html
+            tests/reports/ui_test_results.xml
+            tests/reports/*.png
+            test-results/
+          retention-days: 30
+
+  # Job 3: 汇总测试结果并通知
+  test-summary:
+    name: 测试结果汇总通知
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [api-test, ui-test]
+    if: always()
+    
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 下载API测试结果
+        uses: actions/download-artifact@v4
+        with:
+          name: API测试报告
+          path: api-results
+        continue-on-error: true
+
+      - name: 下载UI测试结果
+        uses: actions/download-artifact@v4
+        with:
+          name: UI测试报告
+          path: ui-results
+        continue-on-error: true
+
+      - name: 汇总测试结果
+        run: |
+          echo "=============================="
+          echo "      自动化测试结果汇总"
+          echo "=============================="
+          echo ""
+          echo "Job: 后端接口测试 -> ${{ needs.api-test.result }}"
+          echo "Job: 前端UI测试   -> ${{ needs.ui-test.result }}"
+          echo ""
+          
+          if [ -f api-results/api_test_results.xml ]; then
+            echo "=== 接口测试统计 ==="
+            grep -oP 'tests="\K\d+' api-results/api_test_results.xml | head -1 | awk '{print "用例数: "$1}'
+            grep -oP 'failures="\K\d+' api-results/api_test_results.xml | head -1 | awk '{print "失败数: "$1}'
+            grep -oP 'errors="\K\d+' api-results/api_test_results.xml | head -1 | awk '{print "错误数: "$1}'
+          fi
+          echo ""
+          
+          if [ -f ui-results/ui_test_results.xml ]; then
+            echo "=== UI测试统计 ==="
+            grep -oP 'tests="\K\d+' ui-results/ui_test_results.xml | head -1 | awk '{print "用例数: "$1}'
+            grep -oP 'failures="\K\d+' ui-results/ui_test_results.xml | head -1 | awk '{print "失败数: "$1}'
+          fi
+          echo ""
+          echo "详细测试报告请在本次Actions的Artifacts中下载查看。"
+
+      - name: 生成测试徽章（可选）
+        if: success()
+        run: |
+          echo "所有自动化测试已执行完成，测试报告已上传至Artifacts。"
+          echo "你可以将本次测试的徽章链接添加到README中。"

@@ -1,0 +1,10 @@
+{
+  "src": [
+    "pages/Login",
+    "pages/StudentHome",
+    "pages/StudyPlan",
+    "pages/ScoreSubmit",
+    "pages/MyScores",
+    "pages/Index"
+  ]
+}

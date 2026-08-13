@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx vue-tsc *)",
+      "Bash(mysql *)",
+      "Bash(npx vite *)",
+      "Bash(mvn --version)",
+      "Bash(java --version)",
+      "Bash(npm --version)",
+      "Bash(where redis-server *)"
+    ]
+  }
+}

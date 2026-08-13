@@ -1,0 +1,77 @@
+name: Bug报告
+description: 发现一个Bug请在此报告
+title: "[Bug] 简洁描述问题"
+labels: ["bug", "待确认"]
+body:
+  - type: dropdown
+    id: module
+    attributes:
+      label: 所属模块
+      description: 请选择问题所属模块
+      options:
+        - 后端接口 (Spring Boot)
+        - 前端管理后台 (Vue)
+        - 学生端 (鸿蒙ArkTS)
+        - 自动化测试
+        - 部署运维
+        - 其他
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: 版本/提交号
+      description: 出现问题时的代码版本或commit号
+      placeholder: e.g. commit abc12345
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 请详细描述你遇到的问题
+      placeholder: |
+        1. 你做了什么操作？
+        2. 期望的结果是什么？
+        3. 实际发生了什么？
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 如何复现这个问题
+      placeholder: |
+        1. 登录...
+        2. 进入...页面
+        3. 点击...按钮
+        4. 看到错误...
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 错误日志/截图
+      description: 粘贴后端控制台日志、浏览器F12错误信息或截图
+      render: shell
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 运行环境
+      description: 系统环境信息
+      value: |
+        - 操作系统: [如 Windows 11]
+        - JDK版本: [如 JDK 17]
+        - Node版本: [如 Node 18.17.0]
+        - MySQL版本: [如 MySQL 8.0]
+        - 浏览器: [如 Chrome 120]
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 检查清单
+      options:
+        - label: 我已确认这是一个Bug，而不是使用问题
+        - label: 我已搜索现有的Issue确认没有重复报告
+        - label: 我提供了足够的信息让开发者复现问题
