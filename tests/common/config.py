@@ -5,8 +5,8 @@
 import os
 
 # ==================== 基础配置 ====================
-# 后端服务地址
-BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8080")
+# 后端服务地址（注意：context-path 为 /second-class）
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8080/second-class")
 # 前端服务地址
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
