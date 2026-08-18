@@ -77,23 +77,6 @@
 
 ---
 
-### 🎓 学生端（Web 版 / 对应鸿蒙 App 同布局）
-
-| 学生登录（移动端尺寸） | 首页仪表盘 |
-|:---:|:---:|
-| ![学生登录](docs/screenshots/08-student-login-mobile.png) | ![学生首页](docs/screenshots/09-student-home.png) |
-| *账号密码登录* | *总积分/赛事入口* |
-
-| 学习计划 | 成绩填报 | 我的成绩 |
-|:---:|:---:|:---:|
-| ![学习计划](docs/screenshots/10-student-study-plan.png) | ![成绩填报](docs/screenshots/11-student-score-submit.png) | ![我的成绩](docs/screenshots/12-student-my-scores.png) |
-| *学分要求/赛事推荐* | *赛事+赛项+级别选择+证书上传* | *明细 + 审核状态实时展示* |
-
-> 📌 截图脚本：[`docs/take_screenshots.py`](docs/take_screenshots.py)（Playwright 自动化截图）
-> 📁 所有截图：[`docs/screenshots/`](docs/screenshots/)
-
----
-
 ### 📱 学生端（微信小程序 · 原生登录）
 
 | 微信登录页 | 首页仪表盘 |
@@ -110,6 +93,9 @@
 |:---:|:---:|
 | ![学习计划](screenshots/miniprogram/06_plan.png) | ![个人中心](screenshots/miniprogram/07_profile.png) |
 | *学分进度环形图 + 赛事推荐* | *用户信息 + 功能菜单* |
+
+> 📌 截图生成脚本：[`tests/gen_miniprogram_screenshots.py`](tests/gen_miniprogram_screenshots.py)
+> 📁 截图目录：[`screenshots/miniprogram/`](screenshots/miniprogram/) ｜ 后台截图：[`docs/screenshots/`](docs/screenshots/)
 
 ---
 

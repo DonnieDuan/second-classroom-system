@@ -42,8 +42,6 @@
 
       <div class="switch-links">
         <router-link to="/login/teacher">老师登录</router-link>
-        <span class="divider">|</span>
-        <router-link to="/login/student">学生登录</router-link>
       </div>
     </div>
   </div>

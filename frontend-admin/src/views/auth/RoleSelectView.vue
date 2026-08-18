@@ -20,14 +20,6 @@
           <h3>老 师</h3>
           <p>成绩录入与审核管理</p>
         </div>
-
-        <div class="role-card student-card" @click="$router.push('/login/student')">
-          <div class="card-icon">
-            <el-icon :size="42"><UserFilled /></el-icon>
-          </div>
-          <h3>学 生</h3>
-          <p>成绩查询与报名参赛</p>
-        </div>
       </div>
 
       <div class="landing-footer">
@@ -38,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { Management, School, UserFilled } from '@element-plus/icons-vue'
+import { Management, School } from '@element-plus/icons-vue';
 </script>
 
 <style scoped>
@@ -122,14 +114,6 @@ import { Management, School, UserFilled } from '@element-plus/icons-vue'
 }
 
 .teacher-card .card-icon { color: #e07b39; }
-
-.student-card:hover {
-  background: rgba(45, 106, 79, 0.5);
-  border-color: #48bb78;
-  box-shadow: 0 12px 40px rgba(72, 187, 120, 0.35);
-}
-
-.student-card .card-icon { color: #48bb78; }
 
 .landing-footer {
   margin-top: 48px;
