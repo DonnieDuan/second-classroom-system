@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="38" time="1.120" timestamp="2026-08-18T19:35:26.420244+08:00" hostname="LAPTOP-T30656IP"><testcase classname="api.test_auth.TestAuthLogin" name="test_login_success[login_data0-TC-AUTH-001-\u5b66\u751f\u6b63\u5e38\u767b\u5f55]" time="0.041"><failure message="AssertionError: 学生正常登录 业务状态码错误: 401，响应内容: 角色不匹配，请选择正确的身份登录">self = &lt;test_auth.TestAuthLogin object at 0x0000018100D0D1D0&gt;
+login_data = {'username': '20231012023', 'password': '123456'}
+case_id = 'TC-AUTH-001', desc = '学生正常登录'
+
+    @pytest.mark.parametrize("login_data, case_id, desc", [
+        (TEST_STUDENT, "TC-AUTH-001", "学生正常登录"),
+        (TEST_TEACHER, "TC-AUTH-002", "教师正常登录"),
+    ])
+    def test_login_success(self, login_data, case_id, desc):
+        """正常登录测试"""
+        print(f"\n[{case_id}] {desc}")
+        response = self.client.post("/api/auth/login", json=login_data)
+&gt;       data = assert_success(response, desc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+api\test_auth.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [200]&gt;, message = '学生正常登录'
+
+    def assert_success(response, message=""):
+        """断言接口返回成功"""
+        assert response.status_code == 200, f"{message} HTTP状态码错误: {response.status_code}，响应内容: {response.text}"
+        data = response.json()
+&gt;       assert data.get("code") == 200 or data.get("code") == 0, f"{message} 业务状态码错误: {data.get('code')}，响应内容: {data.get('msg')}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: 学生正常登录 业务状态码错误: 401，响应内容: 角色不匹配，请选择正确的身份登录
+
+common\__init__.py:61: AssertionError</failure></testcase><testcase classname="api.test_auth.TestAuthLogin" name="test_login_success[login_data1-TC-AUTH-002-\u6559\u5e08\u6b63\u5e38\u767b\u5f55]" time="0.019"><failure message="AssertionError: 教师正常登录 业务状态码错误: 401，响应内容: 账号不存在">self = &lt;test_auth.TestAuthLogin object at 0x0000018100D0D450&gt;
+login_data = {'username': 'teacher', 'password': '123456'}
+case_id = 'TC-AUTH-002', desc = '教师正常登录'
+
+    @pytest.mark.parametrize("login_data, case_id, desc", [
+        (TEST_STUDENT, "TC-AUTH-001", "学生正常登录"),
+        (TEST_TEACHER, "TC-AUTH-002", "教师正常登录"),
+    ])
+    def test_login_success(self, login_data, case_id, desc):
+        """正常登录测试"""
+        print(f"\n[{case_id}] {desc}")
+        response = self.client.post("/api/auth/login", json=login_data)
+&gt;       data = assert_success(response, desc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+api\test_auth.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [200]&gt;, message = '教师正常登录'
+
+    def assert_success(response, message=""):
+        """断言接口返回成功"""
+        assert response.status_code == 200, f"{message} HTTP状态码错误: {response.status_code}，响应内容: {response.text}"
+        data = response.json()
+&gt;       assert data.get("code") == 200 or data.get("code") == 0, f"{message} 业务状态码错误: {data.get('code')}，响应内容: {data.get('msg')}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: 教师正常登录 业务状态码错误: 401，响应内容: 账号不存在
+
+common\__init__.py:61: AssertionError</failure></testcase><testcase classname="api.test_auth.TestAuthLogin" name="test_login_username_not_exist" time="0.026" /><testcase classname="api.test_auth.TestAuthLogin" name="test_login_wrong_password" time="0.005" /><testcase classname="api.test_auth.TestAuthLogin" name="test_login_empty_username" time="0.005" /><testcase classname="api.test_auth.TestAuthLogin" name="test_login_empty_password" time="0.018" /><testcase classname="api.test_auth.TestAuthRegister" name="test_register_empty_validation" time="0.114" /><testcase classname="api.test_event.TestEventCRUD" name="test_create_event" time="0.030" /><testcase classname="api.test_event.TestEventCRUD" name="test_query_event_list" time="0.033" /><testcase classname="api.test_event.TestEventCRUD" name="test_query_all_events" time="0.004" /><testcase classname="api.test_event.TestEventCRUD" name="test_query_event_detail" time="0.011" /><testcase classname="api.test_event.TestEventCRUD" name="test_update_event" time="0.007" /><testcase classname="api.test_event.TestEventCRUD" name="test_delete_event" time="0.006" /><testcase classname="api.test_event.TestItemCRUD" name="test_create_item" time="0.006" /><testcase classname="api.test_event.TestItemCRUD" name="test_query_items_by_event" time="0.017" /><testcase classname="api.test_event.TestItemCRUD" name="test_query_item_list" time="0.017" /><testcase classname="api.test_event.TestEventLevelCRUD" name="test_create_level" time="0.007" /><testcase classname="api.test_event.TestEventLevelCRUD" name="test_query_all_levels" time="0.004" /><testcase classname="api.test_score.TestScoreSubmit" name="test_submit_score" time="0.043" /><testcase classname="api.test_score.TestScoreSubmit" name="test_submit_score_missing_field" time="0.005" /><testcase classname="api.test_score.TestScoreAudit" name="test_audit_score_pass" time="0.028" /><testcase classname="api.test_score.TestScoreAudit" name="test_audit_score_reject" time="0.031" /><testcase classname="api.test_score.TestScoreQuery" name="test_query_my_scores" time="0.029" /><testcase classname="api.test_score.TestScoreQuery" name="test_query_my_total" time="0.015" /><testcase classname="api.test_score.TestScoreQuery" name="test_query_score_page" time="0.020" /><testcase classname="api.test_score.TestScoreQuery" name="test_query_score_filter_by_name" time="0.031" /><testcase classname="api.test_score.TestScoreQuery" name="test_query_score_filter_by_event" time="0.032" /><testcase classname="api.test_score.TestScoreStatistics" name="test_class_score_summary" time="0.038" /><testcase classname="api.test_score.TestScoreStatistics" name="test_dashboard_statistics" time="0.056" /><testcase classname="api.test_student_org.TestStudentCRUD" name="test_create_student" time="0.030" /><testcase classname="api.test_student_org.TestStudentCRUD" name="test_query_student_list" time="0.029" /><testcase classname="api.test_student_org.TestStudentCRUD" name="test_query_student_detail" time="0.033" /><testcase classname="api.test_student_org.TestStudentCRUD" name="test_query_students_by_class" time="0.007" /><testcase classname="api.test_student_org.TestStudentCRUD" name="test_update_student" time="0.008" /><testcase classname="api.test_student_org.TestStudentCRUD" name="test_delete_student" time="0.008" /><testcase classname="api.test_student_org.TestOrgCRUD" name="test_get_org_tree" time="0.005" /><testcase classname="api.test_student_org.TestOrgCRUD" name="test_create_org" time="0.024" /><testcase classname="api.test_student_org.TestOrgCRUD" name="test_query_org_detail" time="0.035" /></testsuite></testsuites>
