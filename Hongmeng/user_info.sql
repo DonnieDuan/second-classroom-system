@@ -41,7 +41,7 @@ CREATE TABLE `user_info`  (
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
-INSERT INTO `user_info` VALUES (1, 'admin', 'admin123', '系统管理员', 'admin', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-26 20:54:38');
+INSERT INTO `user_info` VALUES (1, 'admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', '系统管理员', 'admin', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-26 20:54:38');
 INSERT INTO `user_info` VALUES (2, 'T2024001', '123456', '张老师', 'teacher', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-26 20:54:38');
 INSERT INTO `user_info` VALUES (3, '2024001001', '123456', '李明', 'student', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-26 20:54:38');
 
