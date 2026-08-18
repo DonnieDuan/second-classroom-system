@@ -1,47 +1,66 @@
 <!--pages/login/login.wxml-->
 <view class="login-container">
+  <!-- 背景装饰 -->
+  <view class="bg-decoration"></view>
+
   <view class="login-header">
-    <view class="login-logo">📚</view>
+    <view class="login-logo-wrap">
+      <view class="login-logo">📚</view>
+    </view>
     <view class="login-title">第二课堂成绩管理</view>
-    <view class="login-subtitle">第二课堂成绩单系统</view>
+    <view class="login-subtitle">WeChat 小程序 · 学生端</view>
   </view>
 
   <view class="login-card">
-    <view class="form-item">
-      <view class="form-label">学号</view>
-      <input
-        class="form-input"
-        type="text"
-        placeholder="请输入学号"
-        value="{{username}}"
-        bindinput="onUsernameInput"
-      />
+    <!-- 学号绑定（可选） -->
+    <view class="bind-section">
+      <view class="bind-label">绑定学号（可选，用于首次绑定）</view>
+      <view class="form-item">
+        <view class="form-icon">👤</view>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="请输入学号，如 2023101203"
+          value="{{stuNo}}"
+          bindinput="onStuNoInput"
+        />
+      </view>
     </view>
 
-    <view class="form-item">
-      <view class="form-label">密码</view>
-      <input
-        class="form-input"
-        type="password"
-        placeholder="请输入密码"
-        value="{{password}}"
-        bindinput="onPasswordInput"
-      />
+    <view wx:if="{{errorMsg}}" class="error-msg">
+      <text class="error-icon">⚠️</text>
+      <text>{{errorMsg}}</text>
     </view>
 
-    <view wx:if="{{errorMsg}}" class="error-msg">{{errorMsg}}</view>
-
+    <!-- 微信一键登录按钮 -->
     <button
-      class="btn-primary login-btn"
+      class="btn-wx-login"
       loading="{{loading}}"
       disabled="{{loading}}"
-      bindtap="doLogin"
+      bindtap="onWxLogin"
     >
-      登 录
+      <view class="wx-btn-inner">
+        <view class="wx-icon">
+          <view class="wx-icon-green"></view>
+        </view>
+        <text class="wx-btn-text">{{loading ? '登录中...' : '微信一键登录'}}</text>
+      </view>
+    </button>
+
+    <view class="login-divider">
+      <view class="divider-line"></view>
+      <text class="divider-text">其他方式</text>
+      <view class="divider-line"></view>
+    </view>
+
+    <!-- 账号密码登录 -->
+    <button class="btn-account" bindtap="onAccountLogin">
+      <text>账号密码登录</text>
     </button>
   </view>
 
   <view class="login-footer">
     <text class="footer-text">© 2024 第二课堂成绩管理系统</text>
+    <text class="footer-tip">登录即代表同意《用户协议》和《隐私政策》</text>
   </view>
 </view>

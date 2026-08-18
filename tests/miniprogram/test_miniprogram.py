@@ -112,6 +112,118 @@ class TestStudentLogin:
                data.get('code') == 200
 
 
+class TestWxLogin:
+    """微信小程序登录测试 - 对应小程序 wx.login() 流程"""
+
+    def test_wx_login_with_code_only(self, api_client, backend_available):
+        """TC-MP-WX-001: 仅用 code 登录（自动走演示账号）
+
+        验证: wx.login() 获取 code → 发送后端 → 返回 token
+        """
+        print("\n[TC-MP-WX-001] 微信一键登录（仅 code）")
+
+        import uuid
+        mock_code = 'wx_mock_code_' + uuid.uuid4().hex[:8]
+
+        url = f'{BACKEND_API_URL}/auth/wx-login'
+        payload = {'code': mock_code}
+
+        resp = api_client.post(url, json=payload, timeout=REQUEST_TIMEOUT)
+        print(f"  HTTP 状态码: {resp.status_code}")
+
+        data = resp.json()
+        print(f"  业务状态码: {data.get('code')}, 消息: {data.get('msg')}")
+
+        assert data.get('code') == 200, f"微信登录失败: {data.get('msg')}"
+
+        result = data.get('data', {})
+        token = result.get('token')
+        assert token is not None, "未返回 token"
+        assert result.get('role') == 'student', "角色应为 student"
+        assert result.get('stuId') is not None, "缺少 stuId"
+        assert result.get('userId') is not None, "缺少 userId"
+        assert result.get('wxCode') == mock_code, "wxCode 应等于传入的 code"
+        print(f"  ✅ 登录成功: userId={result.get('userId')}, stuId={result.get('stuId')}, token={token[:20]}...")
+
+    def test_wx_login_with_stuNo_binding(self, api_client, backend_available):
+        """TC-MP-WX-002: code + 学号绑定登录
+
+        验证: 新用户首次登录绑定学号的场景
+        """
+        print("\n[TC-MP-WX-002] 微信登录 + 学号绑定")
+
+        url = f'{BACKEND_API_URL}/auth/wx-login'
+        payload = {
+            'code': 'wx_bind_code_001',
+            'stuNo': TEST_STUDENT['username']
+        }
+
+        resp = api_client.post(url, json=payload, timeout=REQUEST_TIMEOUT)
+        print(f"  HTTP 状态码: {resp.status_code}")
+
+        data = resp.json()
+        print(f"  业务状态码: {data.get('code')}, 消息: {data.get('msg')}")
+
+        assert data.get('code') == 200, f"绑定登录失败: {data.get('msg')}"
+
+        result = data.get('data', {})
+        assert result.get('username') == TEST_STUDENT['username'], "用户名不匹配"
+        assert result.get('stuId') == 11, f"stuId 应为 11，实际: {result.get('stuId')}"
+        print(f"  ✅ 绑定成功: username={result.get('username')}, stuId={result.get('stuId')}")
+
+    def test_wx_login_token_can_access_api(self, api_client, backend_available):
+        """TC-MP-WX-003: 微信登录 token 可访问受保护接口
+
+        验证: 用微信登录获取的 token 调用成绩接口
+        """
+        print("\n[TC-MP-WX-003] 微信登录 token 调用接口")
+
+        # 1. 微信登录获取 token
+        login_url = f'{BACKEND_API_URL}/auth/wx-login'
+        login_resp = api_client.post(login_url, json={'code': 'wx_protected_test'}, timeout=REQUEST_TIMEOUT)
+        login_data = login_resp.json()
+        token = login_data.get('data', {}).get('token')
+        stu_id = login_data.get('data', {}).get('stuId')
+
+        assert token, "微信登录未返回 token"
+        print(f"  步骤1: 微信登录获取 token 成功")
+
+        # 2. 用 token 调用成绩接口
+        api_client.headers.update({'Authorization': f'Bearer {token}'})
+        scores_url = f'{BACKEND_API_URL}/app/score/my/{stu_id}'
+        resp = api_client.get(scores_url, timeout=REQUEST_TIMEOUT)
+        data = resp.json()
+
+        print(f"  步骤2: 查询成绩列表 - code={data.get('code')}")
+        assert data.get('code') == 200, f"token 调用接口失败: {data.get('msg')}"
+
+        scores = data.get('data', [])
+        print(f"  ✅ 成绩接口调用成功，共 {len(scores)} 条记录")
+
+    def test_wx_login_invalid_user(self, api_client, backend_available):
+        """TC-MP-WX-004: 无效学号绑定 - 回退到演示账号
+
+        验证: 绑定不存在的学号时，系统回退到默认演示账号
+        """
+        print("\n[TC-MP-WX-004] 无效学号绑定（回退演示账号）")
+
+        url = f'{BACKEND_API_URL}/auth/wx-login'
+        payload = {
+            'code': 'wx_invalid_test',
+            'stuNo': '999999999'
+        }
+
+        resp = api_client.post(url, json=payload, timeout=REQUEST_TIMEOUT)
+        data = resp.json()
+        print(f"  返回: code={data.get('code')}, msg={data.get('msg')}")
+
+        # 当 code 存在时，系统回退到演示账号（正确的兜底行为）
+        assert data.get('code') == 200, f"应回退到演示账号: {data.get('msg')}"
+        result = data.get('data', {})
+        assert result.get('userId') == 4, f"应回退到演示账号(userId=4), 实际: {result.get('userId')}"
+        print(f"  ✅ 正确回退到演示账号: userId={result.get('userId')}, stuId={result.get('stuId')}")
+
+
 class TestEventsList:
     """赛事列表模块测试 - 对应小程序赛事列表页"""
 

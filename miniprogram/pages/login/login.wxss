@@ -1,7 +1,7 @@
 /* pages/login/login.wxss */
 
 page {
-  background: linear-gradient(180deg, #409EFF 0%, #66b1ff 50%, #f0f2f5 100%);
+  background: linear-gradient(180deg, #07C160 0%, #4CD964 30%, #f0f2f5 100%);
   min-height: 100vh;
 }
 
@@ -10,22 +10,47 @@ page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 120rpx 60rpx 60rpx;
+  padding: 100rpx 60rpx 60rpx;
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景装饰 */
+.bg-decoration {
+  position: absolute;
+  top: -200rpx;
+  right: -100rpx;
+  width: 400rpx;
+  height: 400rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 80rpx;
+  margin-bottom: 60rpx;
+  z-index: 1;
+}
+
+.login-logo-wrap {
+  width: 140rpx;
+  height: 140rpx;
+  margin: 0 auto 28rpx;
+  background: #fff;
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.15);
 }
 
 .login-logo {
-  font-size: 120rpx;
-  margin-bottom: 24rpx;
+  font-size: 72rpx;
 }
 
 .login-title {
-  font-size: 48rpx;
+  font-size: 52rpx;
   font-weight: bold;
   color: #fff;
   letter-spacing: 4rpx;
@@ -33,41 +58,177 @@ page {
 
 .login-subtitle {
   font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
   margin-top: 12rpx;
 }
 
 .login-card {
   width: 100%;
   background: #fff;
-  border-radius: 24rpx;
+  border-radius: 28rpx;
   padding: 48rpx 40rpx;
-  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.1);
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.08);
+  z-index: 1;
+}
+
+/* 绑定学号区 */
+.bind-section {
+  margin-bottom: 32rpx;
+}
+
+.bind-label {
+  font-size: 26rpx;
+  color: #909399;
+  margin-bottom: 16rpx;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  background: #f7f8fa;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  height: 96rpx;
+  border: 2rpx solid transparent;
+  transition: all 0.2s;
+}
+
+.form-item:focus-within {
+  border-color: #07C160;
+  background: #fff;
+}
+
+.form-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+  opacity: 0.6;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 30rpx;
+  color: #303133;
+  height: 96rpx;
 }
 
 .error-msg {
-  color: #f56c6c;
+  display: flex;
+  align-items: center;
   font-size: 26rpx;
-  margin-bottom: 20rpx;
-  padding: 12rpx 20rpx;
+  color: #f56c6c;
+  margin-bottom: 24rpx;
+  padding: 16rpx 20rpx;
   background: #fef0f0;
   border-radius: 12rpx;
 }
 
-.login-btn {
-  margin-top: 40rpx;
-  height: 96rpx;
-  line-height: 96rpx;
-  font-size: 34rpx;
-  letter-spacing: 8rpx;
+.error-icon {
+  margin-right: 12rpx;
 }
 
+/* 微信一键登录按钮 */
+.btn-wx-login {
+  width: 100%;
+  height: 96rpx;
+  background: #07C160;
+  color: #fff;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 96rpx;
+}
+
+.btn-wx-login::after {
+  border: none;
+}
+
+.wx-btn-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.wx-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 16rpx;
+  position: relative;
+}
+
+.wx-icon-green {
+  width: 40rpx;
+  height: 40rpx;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.wx-btn-text {
+  font-size: 32rpx;
+  letter-spacing: 4rpx;
+}
+
+/* 分隔线 */
+.login-divider {
+  display: flex;
+  align-items: center;
+  margin: 40rpx 0 32rpx;
+}
+
+.divider-line {
+  flex: 1;
+  height: 2rpx;
+  background: #e4e7ed;
+}
+
+.divider-text {
+  padding: 0 24rpx;
+  font-size: 24rpx;
+  color: #909399;
+}
+
+/* 账号密码登录按钮 */
+.btn-account {
+  width: 100%;
+  height: 88rpx;
+  background: #fff;
+  color: #606266;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  border: 2rpx solid #dcdfe6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-account::after {
+  border: none;
+}
+
+/* 底部 */
 .login-footer {
   margin-top: auto;
   padding: 40rpx 0;
+  text-align: center;
+  z-index: 1;
 }
 
 .footer-text {
+  display: block;
   font-size: 24rpx;
   color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-tip {
+  display: block;
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 12rpx;
 }

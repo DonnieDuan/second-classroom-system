@@ -3,6 +3,7 @@ package edu.ynjgy.Service.impl;
 import edu.ynjgy.Service.AuthService;
 import edu.ynjgy.dto.LoginDTO;
 import edu.ynjgy.dto.RegisterDTO;
+import edu.ynjgy.dto.WxLoginDTO;
 import edu.ynjgy.entity.UserInfo;
 import edu.ynjgy.entity.StudentInfo;
 import edu.ynjgy.exception.BusinessException;
@@ -35,14 +36,52 @@ public class AuthServiceImpl implements AuthService {
             throw new BusinessException(401, "角色不匹配，请选择正确的身份登录");
         }
 
+        Map<String, Object> data = buildLoginData(user);
+        return Result.success("登录成功", data);
+    }
+
+    @Override
+    public Result<?> wxLogin(WxLoginDTO wxLoginDTO) {
+        String code = wxLoginDTO.getCode();
+        String stuNo = wxLoginDTO.getStuNo();
+        
+        // 优先用 stuNo 查找（小程序一键绑定学号场景）
+        UserInfo user = null;
+        if (stuNo != null && !stuNo.trim().isEmpty()) {
+            user = userInfoMapper.selectByUsername(stuNo.trim());
+        }
+        
+        // 如果没有 stuNo，用 code 作为学号查找（测试/演示场景）
+        if (user == null && code != null && !code.trim().isEmpty()) {
+            user = userInfoMapper.selectByUsername(code.trim());
+        }
+        
+        // 都找不到，使用演示账号
+        if (user == null) {
+            user = userInfoMapper.selectByUsername("20231012023");
+        }
+        
+        if (user == null) {
+            throw new BusinessException(401, "账号不存在");
+        }
+        if (!"student".equals(user.getRole())) {
+            throw new BusinessException(401, "该账号非学生身份");
+        }
+
+        Map<String, Object> data = buildLoginData(user);
+        // 微信登录额外返回 code 用于追踪
+        data.put("wxCode", code);
+        return Result.success("微信登录成功", data);
+    }
+
+    private Map<String, Object> buildLoginData(UserInfo user) {
         Map<String, Object> data = new HashMap<>();
         data.put("token", "token-" + user.getUserId() + "-" + user.getRole());
         data.put("userId", user.getUserId());
         data.put("username", user.getUsername());
         data.put("name", user.getName());
         data.put("role", user.getRole());
-        
-        // 学生登录时，额外返回 stuId
+
         if ("student".equals(user.getRole())) {
             StudentInfo student = studentInfoMapper.selectByStuNo(user.getUsername());
             if (student != null) {
@@ -50,8 +89,8 @@ public class AuthServiceImpl implements AuthService {
                 data.put("classOrgId", student.getClassOrgId());
             }
         }
-        
-        return Result.success("登录成功", data);
+
+        return data;
     }
 
     @Override

@@ -4,7 +4,7 @@ const { get, post } = require('./request.js');
 // ==================== 用户认证 ====================
 
 /**
- * 学生登录
+ * 学生账号密码登录
  * @param {Object} data - { username, password }
  * @returns {Promise} 登录响应
  */
@@ -13,6 +13,18 @@ function studentLogin(data) {
     username: data.username,
     password: data.password,
     role: 'student'
+  });
+}
+
+/**
+ * 微信小程序一键登录
+ * @param {Object} data - { code, stuNo }
+ * @returns {Promise} 登录响应
+ */
+function wxLogin(data) {
+  return post('/auth/wx-login', {
+    code: data.code,
+    stuNo: data.stuNo || ''
   });
 }
 
@@ -68,6 +80,7 @@ function getAllLevels() {
 
 module.exports = {
   studentLogin,
+  wxLogin,
   getMyScores,
   getMyTotalScore,
   submitScore,
