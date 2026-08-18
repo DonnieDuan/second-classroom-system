@@ -1,0 +1,95 @@
+<!--pages/plan/plan.wxml-->
+<view class="plan-page">
+  <!-- 顶部标题 -->
+  <view class="plan-header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="header-title">学习计划</view>
+    <view class="header-placeholder"></view>
+  </view>
+
+  <!-- 学分进度卡片 -->
+  <view class="progress-card">
+    <view class="progress-header">
+      <text class="progress-title">学分进度</text>
+      <text class="progress-percent">{{progressPercent}}%</text>
+    </view>
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+    </view>
+    <view class="progress-info">
+      <view class="progress-item">
+        <text class="item-value">{{completedCredits || 0}}</text>
+        <text class="item-label">已修学分</text>
+      </view>
+      <view class="progress-divider"></view>
+      <view class="progress-item">
+        <text class="item-value">{{remainingCredits || 0}}</text>
+        <text class="item-label">剩余学分</text>
+      </view>
+      <view class="progress-divider"></view>
+      <view class="progress-item">
+        <text class="item-value">{{targetCredits || 0}}</text>
+        <text class="item-label">目标学分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计数据卡片 -->
+  <view class="stats-card">
+    <view class="stats-title">本学期数据</view>
+    <view class="stats-grid">
+      <view class="stats-item">
+        <view class="stats-icon">📈</view>
+        <view class="stats-num">{{totalScore || 0}}</view>
+        <view class="stats-label">总积分</view>
+      </view>
+      <view class="stats-item">
+        <view class="stats-icon">📝</view>
+        <view class="stats-num">{{scoreCount || 0}}</view>
+        <view class="stats-label">已填报</view>
+      </view>
+      <view class="stats-item">
+        <view class="stats-icon">✅</view>
+        <view class="stats-num">{{passedCount || 0}}</view>
+        <view class="stats-label">已通过</view>
+      </view>
+      <view class="stats-item">
+        <view class="stats-icon">⏳</view>
+        <view class="stats-num">{{pendingCount || 0}}</view>
+        <view class="stats-label">审核中</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 进行中的计划 -->
+  <view class="plan-section">
+    <view class="section-title">进行中的计划</view>
+    <block wx:if="{{ongoingPlans.length > 0}}">
+      <view class="plan-item" wx:for="{{ongoingPlans}}" wx:key="id">
+        <view class="plan-status ongoing"></view>
+        <view class="plan-info">
+          <view class="plan-name">{{item.name}}</view>
+          <view class="plan-desc">{{item.description || '暂无描述'}}</view>
+        </view>
+        <view class="plan-action">查看</view>
+      </view>
+    </block>
+    <view wx:else class="empty-hint">暂无进行中的计划</view>
+  </view>
+
+  <!-- 已完成的计划 -->
+  <view class="plan-section">
+    <view class="section-title">已完成的计划</view>
+    <block wx:if="{{completedPlans.length > 0}}">
+      <view class="plan-item completed" wx:for="{{completedPlans}}" wx:key="id">
+        <view class="plan-status done"></view>
+        <view class="plan-info">
+          <view class="plan-name">{{item.name}}</view>
+          <view class="plan-desc">{{item.description || '暂无描述'}}</view>
+        </view>
+        <view class="plan-action">已完成</view>
+      </view>
+    </block>
+    <view wx:else class="empty-hint">暂无已完成的计划</view>
+  </view>
+</view>

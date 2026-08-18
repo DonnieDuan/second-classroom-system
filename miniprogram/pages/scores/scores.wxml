@@ -1,0 +1,63 @@
+<!--pages/scores/scores.wxml-->
+<view class="scores-page">
+  <!-- 顶部总积分区域 -->
+  <view class="scores-header">
+    <view class="header-content">
+      <view class="header-label">我的总积分</view>
+      <view class="header-value">{{totalScore || 0}}</view>
+      <view class="header-sub">共 {{scores.length || 0}} 条成绩记录</view>
+    </view>
+  </view>
+
+  <!-- 成绩列表 -->
+  <view class="scores-list">
+    <block wx:if="{{scores.length > 0}}">
+      <view
+        class="score-card"
+        wx:for="{{scores}}"
+        wx:key="id"
+        bindtap="goDetail"
+        data-id="{{item.id}}"
+      >
+        <view class="score-header">
+          <view class="score-event">{{item.eventName || '未知赛事'}}</view>
+          <view class="score-status {{item.auditStatus === 1 ? 'passed' : item.auditStatus === 2 ? 'rejected' : 'pending'}}">
+            {{item.auditStatus === 1 ? '已通过' : item.auditStatus === 2 ? '已拒绝' : '待审核'}}
+          </view>
+        </view>
+        <view class="score-body">
+          <view class="score-info">
+            <view class="score-item">
+              <text class="info-label">赛项</text>
+              <text class="info-value">{{item.itemName || '--'}}</text>
+            </view>
+            <view class="score-item">
+              <text class="info-label">级别</text>
+              <text class="info-value">{{item.levelName || '--'}}</text>
+            </view>
+            <view class="score-item">
+              <text class="info-label">日期</text>
+              <text class="info-value">{{item.certDate || '--'}}</text>
+            </view>
+          </view>
+          <view class="score-points">
+            <text class="points-value">{{item.score || 0}}</text>
+            <text class="points-unit">分</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 空状态 -->
+    <view wx:else class="empty-state">
+      <view class="empty-icon">📋</view>
+      <view class="empty-text">暂无成绩记录</view>
+      <view class="empty-tip">快去填报您的第二课堂成绩吧</view>
+      <button class="btn-primary empty-btn" bindtap="goSubmit">去填报</button>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+  <view wx:if="{{!loading && scores.length === 0}}" class="loading" style="display:none"></view>
+</view>

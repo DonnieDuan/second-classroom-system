@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/home/home",
+    "pages/scores/scores",
+    "pages/submit/submit",
+    "pages/events/events",
+    "pages/plan/plan",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#409EFF",
+    "navigationBarTitleText": "第二课堂成绩管理",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#409EFF",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "images/tab/home.png",
+        "selectedIconPath": "images/tab/home_active.png"
+      },
+      {
+        "pagePath": "pages/scores/scores",
+        "text": "成绩",
+        "iconPath": "images/tab/score.png",
+        "selectedIconPath": "images/tab/score_active.png"
+      },
+      {
+        "pagePath": "pages/submit/submit",
+        "text": "填报",
+        "iconPath": "images/tab/add.png",
+        "selectedIconPath": "images/tab/add_active.png"
+      },
+      {
+        "pagePath": "pages/events/events",
+        "text": "赛事",
+        "iconPath": "images/tab/event.png",
+        "selectedIconPath": "images/tab/event_active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tab/user.png",
+        "selectedIconPath": "images/tab/user_active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

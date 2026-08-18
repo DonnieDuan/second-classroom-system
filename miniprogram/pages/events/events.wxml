@@ -1,0 +1,56 @@
+<!--pages/events/events.wxml-->
+<view class="events-page">
+  <!-- 顶部标题 -->
+  <view class="events-header">
+    <view class="header-title">赛事列表</view>
+    <view class="header-desc">查看所有第二课堂赛事</view>
+  </view>
+
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索赛事名称"
+        value="{{keyword}}"
+        bindinput="onSearch"
+        confirm-type="search"
+      />
+    </view>
+  </view>
+
+  <!-- 赛事列表 -->
+  <view class="events-list">
+    <block wx:if="{{filteredEvents.length > 0}}">
+      <view
+        class="event-card"
+        wx:for="{{filteredEvents}}"
+        wx:key="id"
+        bindtap="goSubmit"
+        data-id="{{item.id}}"
+      >
+        <view class="event-main">
+          <view class="event-name">{{item.name || '未知赛事'}}</view>
+          <view class="event-meta">
+            <view class="event-tag {{item.status === 1 ? 'status-active' : 'status-ended'}}">
+              {{item.status === 1 ? '进行中' : '已结束'}}
+            </view>
+            <view class="event-level">{{item.level || '校级'}}</view>
+          </view>
+        </view>
+        <view class="event-arrow">›</view>
+      </view>
+    </block>
+
+    <!-- 空状态 -->
+    <view wx:else class="empty-state">
+      <view class="empty-icon">🏆</view>
+      <view class="empty-text">暂无赛事</view>
+      <view class="empty-tip">当前没有可参与的赛事</view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+</view>

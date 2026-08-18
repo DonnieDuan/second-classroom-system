@@ -1,0 +1,66 @@
+<!--pages/home/home.wxml-->
+<view class="home-page">
+  <!-- 顶部用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-info">
+      <view class="user-avatar">
+        <image wx:if="{{userInfo.avatar}}" src="{{userInfo.avatar}}" mode="aspectFill" />
+        <view wx:else class="avatar-placeholder">👤</view>
+      </view>
+      <view class="user-detail">
+        <view class="user-name">{{userInfo.name || '同学'}}</view>
+        <view class="user-meta">学号：{{userInfo.studentNo || '--'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 数据统计卡片 -->
+  <view class="stats-section">
+    <view class="stat-row">
+      <view class="stat-card">
+        <view class="stat-value">{{totalScore || 0}}</view>
+        <view class="stat-label">总积分</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{scoreCount || 0}}</view>
+        <view class="stat-label">成绩数量</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="quick-section">
+    <view class="section-title">快捷入口</view>
+    <view class="quick-grid">
+      <view class="quick-item" bindtap="goScores">
+        <view class="quick-icon icon-score">📊</view>
+        <view class="quick-label">我的成绩</view>
+      </view>
+      <view class="quick-item" bindtap="goSubmit">
+        <view class="quick-icon icon-submit">📝</view>
+        <view class="quick-label">成绩填报</view>
+      </view>
+      <view class="quick-item" bindtap="goEvents">
+        <view class="quick-icon icon-event">🏆</view>
+        <view class="quick-label">赛事列表</view>
+      </view>
+      <view class="quick-item" bindtap="goPlan">
+        <view class="quick-icon icon-plan">📅</view>
+        <view class="quick-label">学习计划</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提示卡片 -->
+  <view class="tips-card">
+    <view class="tips-header">
+      <text class="tips-icon">💡</text>
+      <text class="tips-title">温馨提示</text>
+    </view>
+    <view class="tips-content">
+      <view class="tips-item">• 及时填报您的第二课堂成绩</view>
+      <view class="tips-item">• 审核结果可在"我的成绩"中查看</view>
+      <view class="tips-item">• 如有问题请联系辅导员</view>
+    </view>
+  </view>
+</view>

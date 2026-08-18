@@ -1,0 +1,99 @@
+<!--pages/submit/submit.wxml-->
+<view class="submit-page">
+  <!-- 顶部标题 -->
+  <view class="submit-header">
+    <view class="header-title">成绩填报</view>
+    <view class="header-desc">请填写您的第二课堂成绩信息</view>
+  </view>
+
+  <!-- 填报表单 -->
+  <view class="form-card">
+    <!-- 赛事选择 -->
+    <view class="form-item">
+      <view class="form-label">选择赛事</view>
+      <picker
+        mode="selector"
+        range="{{events}}"
+        range-key="name"
+        value="{{selectedEventIndex}}"
+        bindchange="onEventChange"
+      >
+        <view class="form-picker {{selectedEventIndex === null ? 'placeholder' : ''}}">
+          {{selectedEventIndex === null ? '请选择赛事' : events[selectedEventIndex].name}}
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 赛项选择 -->
+    <view class="form-item">
+      <view class="form-label">选择赛项</view>
+      <picker
+        mode="selector"
+        range="{{items}}"
+        range-key="name"
+        value="{{selectedItemIndex}}"
+        bindchange="onItemChange"
+        disabled="{{items.length === 0}}"
+      >
+        <view class="form-picker {{selectedItemIndex === null ? 'placeholder' : ''}} {{items.length === 0 ? 'disabled' : ''}}">
+          {{selectedItemIndex === null ? (items.length === 0 ? '请先选择赛事' : '请选择赛项') : items[selectedItemIndex].name}}
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 获奖级别选择 -->
+    <view class="form-item">
+      <view class="form-label">获奖级别</view>
+      <picker
+        mode="selector"
+        range="{{levels}}"
+        range-key="name"
+        value="{{selectedLevelIndex}}"
+        bindchange="onLevelChange"
+      >
+        <view class="form-picker {{selectedLevelIndex === null ? 'placeholder' : ''}}">
+          {{selectedLevelIndex === null ? '请选择获奖级别' : levels[selectedLevelIndex].name}}
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 获奖日期 -->
+    <view class="form-item">
+      <view class="form-label">获奖日期</view>
+      <picker mode="date" value="{{certDate}}" bindchange="onDateChange">
+        <view class="form-picker {{!certDate ? 'placeholder' : ''}}">
+          {{certDate || '请选择获奖日期'}}
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 证书上传 -->
+    <view class="form-item">
+      <view class="form-label">证书照片</view>
+      <view class="upload-area" bindtap="chooseImage">
+        <image wx:if="{{certPath}}" src="{{certPath}}" mode="aspectFill" class="upload-image" />
+        <view wx:else class="upload-placeholder">
+          <view class="upload-icon">📷</view>
+          <view class="upload-text">点击上传证书</view>
+          <view class="upload-hint">支持 JPG/PNG 格式</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-footer">
+    <button
+      class="btn-primary submit-btn"
+      loading="{{submitting}}"
+      disabled="{{submitting}}"
+      bindtap="onSubmit"
+    >
+      提交成绩
+    </button>
+  </view>
+</view>

@@ -5,30 +5,32 @@
   <img src="https://img.shields.io/badge/Vue-3.x-blue" alt="Vue3">
   <img src="https://img.shields.io/badge/MySQL-8.0-orange" alt="MySQL">
   <img src="https://img.shields.io/badge/MyBatis-3.5-yellow" alt="MyBatis">
-  <img src="https://img.shields.io/badge/HarmonyOS-ArkTS-purple" alt="HarmonyOS ArkTS">
+  <img src="https://img.shields.io/badge/微信小程序-Native%20Dev-green" alt="WeChat MiniProgram">
   <img src="https://img.shields.io/badge/Element%20Plus-2.x-darkblue" alt="Element Plus">
   <img src="https://img.shields.io/badge/Tests-pytest%20%7C%20Playwright-lightgrey" alt="Tests">
 </p>
 
 ## 🎯 项目简介
 
-面向高校学生和教师的第二课堂成绩管理平台，支持**成绩申报 → 教师审核 → 统计分析**全流程数字化管理。项目采用前后端分离 + 鸿蒙原生应用三端架构：
+面向高校学生和教师的第二课堂成绩管理平台，支持**成绩申报 → 教师审核 → 统计分析**全流程数字化管理。项目采用前后端分离 + 微信小程序三端架构：
 
 | 端 | 技术栈 | 主要用户 |
 |----|--------|----------|
 | 后端服务 | Java Spring Boot + MyBatis + MySQL | 服务端 |
 | 管理后台 | Vue 3 + Element Plus + Vite | 教师、管理员 |
-| 移动端 | 鸿蒙 ArkTS (HarmonyOS Next) | 学生 |
+| 移动端 | 微信小程序原生开发 (WXML/WXSS/JS) | 学生 |
 
 ---
 
 ## ✨ 核心功能
 
-### 🎓 学生端（鸿蒙应用）
-- **成绩填报**：赛事/赛项/获奖级别底部弹窗滑动选择 + 日期选择器 + 证书上传
-- **学习计划**：赛事分类推荐、学分要求说明、学分进度可视化
-- **积分统计**：总积分概览、成绩明细列表、审核状态实时展示
-- **本地持久化**：Preferences 保存登录状态，离线可用
+### 🎓 学生端（微信小程序）
+- **成绩填报**：赛事/赛项/级别三级联动 Picker + 日期选择 + 证书上传
+- **学习计划**：学分进度条、已修/目标学分统计、计划列表
+- **积分统计**：总积分仪表盘、成绩卡片列表、审核状态彩色标签
+- **赛事浏览**：搜索过滤、赛事详情、快速填报跳转
+- **本地持久化**：wx.setStorageSync 保存登录态，401 自动清理 token
+- **自动化测试**：35 个 Mock 单元测试 + 17 个 API 集成测试，全部通过
 
 ### 👨‍🏫 教师端（管理后台）
 - **成绩审核**：待审核/已通过/未通过状态管理 + 审核意见记录（支持拒绝原因）
