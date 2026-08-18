@@ -94,6 +94,25 @@
 
 ---
 
+### 📱 学生端（微信小程序 · 原生登录）
+
+| 微信登录页 | 首页仪表盘 |
+|:---:|:---:|
+| ![登录页](screenshots/miniprogram/01_login.png) | ![首页](screenshots/miniprogram/02_home.png) |
+| *wx.login 原生一键登录* | *总积分/快捷入口/最近成绩* |
+
+| 我的成绩 | 成绩填报 | 赛事列表 |
+|:---:|:---:|:---:|
+| ![我的成绩](screenshots/miniprogram/03_scores.png) | ![成绩填报](screenshots/miniprogram/04_submit.png) | ![赛事列表](screenshots/miniprogram/05_events.png) |
+| *5条成绩明细 + 审核状态标签* | *赛事/赛项/级别三级联动+证书上传* | *搜索过滤 + 分类标签* |
+
+| 学习计划 | 个人中心 |
+|:---:|:---:|
+| ![学习计划](screenshots/miniprogram/06_plan.png) | ![个人中心](screenshots/miniprogram/07_profile.png) |
+| *学分进度环形图 + 赛事推荐* | *用户信息 + 功能菜单* |
+
+---
+
 ## 📁 项目结构
 
 ```
