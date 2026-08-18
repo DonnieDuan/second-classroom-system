@@ -49,6 +49,8 @@ Hongmeng2/.preview/
 # ---------- 测试报告与Python ----------
 tests/reports/*
 !tests/reports/.gitkeep
+!tests/reports/sample/
+!tests/reports/sample/**
 tests/.pytest_cache/
 tests/__pycache__/
 htmlcov/

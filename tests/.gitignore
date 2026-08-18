@@ -5,9 +5,11 @@ __pycache__/
 .Python
 *.egg-info/
 
-# 测试报告
+# 测试报告（CI 实时产出的不入库；保留 sample/ 下的一份示例用于面试展示）
 tests/reports/*
 !tests/reports/.gitkeep
+!tests/reports/sample/
+!tests/reports/sample/**
 tests/.pytest_cache/
 htmlcov/
 .coverage
