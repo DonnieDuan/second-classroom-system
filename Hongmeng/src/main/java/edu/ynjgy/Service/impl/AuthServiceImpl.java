@@ -1,20 +1,22 @@
 package edu.ynjgy.Service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import edu.ynjgy.Service.AuthService;
 import edu.ynjgy.dto.LoginDTO;
 import edu.ynjgy.dto.RegisterDTO;
 import edu.ynjgy.dto.WxLoginDTO;
-import edu.ynjgy.entity.UserInfo;
 import edu.ynjgy.entity.StudentInfo;
+import edu.ynjgy.entity.UserInfo;
 import edu.ynjgy.exception.BusinessException;
-import edu.ynjgy.mapper.UserInfoMapper;
 import edu.ynjgy.mapper.StudentInfoMapper;
+import edu.ynjgy.mapper.UserInfoMapper;
 import edu.ynjgy.utils.Result;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserInfoMapper userInfoMapper;
     private final StudentInfoMapper studentInfoMapper;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public Result<?> login(LoginDTO loginDTO) {
@@ -29,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
         if (user == null) {
             throw new BusinessException(401, "账号不存在");
         }
-        if (!user.getPassword().equals(loginDTO.getPassword())) {
+        if (!verifyPassword(loginDTO.getPassword(), user.getPassword())) {
             throw new BusinessException(401, "密码错误");
         }
         if (!user.getRole().equals(loginDTO.getRole())) {
@@ -38,6 +41,18 @@ public class AuthServiceImpl implements AuthService {
 
         Map<String, Object> data = buildLoginData(user);
         return Result.success("登录成功", data);
+    }
+
+    private boolean verifyPassword(String rawPassword, String storedPassword) {
+        if (storedPassword == null) {
+            return false;
+        }
+        // BCrypt密码校验（以 $2a$ 开头）
+        if (storedPassword.startsWith("$2a$")) {
+            return passwordEncoder.matches(rawPassword, storedPassword);
+        }
+        // 明文密码校验（兼容旧数据）
+        return storedPassword.equals(rawPassword);
     }
 
     @Override
@@ -102,7 +117,8 @@ public class AuthServiceImpl implements AuthService {
 
         UserInfo userInfo = new UserInfo();
         userInfo.setUsername(registerDTO.getUsername());
-        userInfo.setPassword(registerDTO.getPassword());
+        // BCrypt加密存储密码
+        userInfo.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         userInfo.setName(registerDTO.getName());
         userInfo.setRole(registerDTO.getRole());
         userInfo.setPhone(registerDTO.getPhone());
