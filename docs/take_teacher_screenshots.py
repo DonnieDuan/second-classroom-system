@@ -12,8 +12,8 @@ SCREENSHOT_DIR = r"d:\java\1\docs\screenshots"
 os.makedirs(SCREENSHOT_DIR, exist_ok=True)
 
 # 教师账号
-TEACHER_USER = "teacher001_screenshot"
-TEACHER_PASS = "Test123456"
+TEACHER_USER = "teacher001"
+TEACHER_PASS = "123456"
 
 
 def save(page, name: str):
